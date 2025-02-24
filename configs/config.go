@@ -3,13 +3,14 @@ package configs
 import (
 	"context"
 	"log"
+	"os"
+	"strconv"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3/types"
-	"github.com/spf13/viper"
 )
 
 type Config struct {
@@ -38,16 +39,19 @@ func LoadConfig(path string) (config Config, err error) {
 	// 	log.Fatalf("Unable to decode into struct, %v", err)
 	// }
 
+	timeout, _ := strconv.Atoi(os.Getenv("TIMEOUT"))
+	port, _ := strconv.Atoi(os.Getenv("PORT"))
+
 	config = Config{
-		ACCESS_KEY_ID:               viper.GetString("ACCESS_KEY_ID"),
-		SECRET_ACCESS_KEY:           viper.GetString("SECRET_ACCESS_KEY"),
-		BUCKET_NAME:                 viper.GetString("S3_BUCKET_NAME"),
-		REGION:                      viper.GetString("REGION"),
-		S3_BUCKET_ACCESS_KEY:        viper.GetString("S3_BUCKET_ACCESS_KEY"),
-		S3_BUCKET_SECRET_ACCESS_KEY: viper.GetString("S3_BUCKET_SECRET_ACCESS_KEY"),
-		TIMEOUT:                     viper.GetInt("TIMEOUT"),
-		API_GROUP:                   viper.GetString("API_GROUP"),
-		PORT:                        viper.GetInt("PORT"),
+		ACCESS_KEY_ID:               os.Getenv("ACCESS_KEY_ID"),
+		SECRET_ACCESS_KEY:           os.Getenv("SECRET_ACCESS_KEY"),
+		BUCKET_NAME:                 os.Getenv("S3_BUCKET_NAME"),
+		REGION:                      os.Getenv("REGION"),
+		S3_BUCKET_ACCESS_KEY:        os.Getenv("S3_BUCKET_ACCESS_KEY"),
+		S3_BUCKET_SECRET_ACCESS_KEY: os.Getenv("S3_BUCKET_SECRET_ACCESS_KEY"),
+		TIMEOUT:                     timeout,
+		API_GROUP:                   os.Getenv("API_GROUP"),
+		PORT:                        port,
 	}
 
 	return config, nil
