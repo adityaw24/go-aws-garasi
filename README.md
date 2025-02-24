@@ -12,7 +12,7 @@ This is a Go project template with AWS SDK integration.
 
 1. Configure your AWS credentials:
    - Create `~/.aws/credentials` file or
-   - Set environment variables: `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
+   - Set environment variables: `ACCESS_KEY_ID` and `SECRET_ACCESS_KEY`
 
 2. Install dependencies:
    ```bash

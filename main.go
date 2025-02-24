@@ -40,7 +40,7 @@ func main() {
 
 	timeout := time.Duration(cfg.TIMEOUT) * time.Second
 
-	repoUpload := repo.NewRepoUpload(client, presignClient, cfg.AWS_BUCKET_NAME, timeout)
+	repoUpload := repo.NewRepoUpload(client, presignClient, cfg.BUCKET_NAME, timeout)
 	usecasesUpload := usecase.NewUsecaseUpload(repoUpload)
 	handlerUpload := handler.NewHandlerUpload(usecasesUpload)
 

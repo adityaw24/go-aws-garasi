@@ -14,15 +14,15 @@ import (
 )
 
 type Config struct {
-	AWS_ACCESS_KEY_ID               string `mapstructure:"AWS_ACCESS_KEY_ID"`
-	AWS_SECRET_ACCESS_KEY           string `mapstructure:"AWS_SECRET_ACCESS_KEY"`
-	AWS_BUCKET_NAME                 string `mapstructure:"AWS_S3_BUCKET_NAME"`
-	AWS_REGION                      string `mapstructure:"AWS_REGION"`
-	AWS_S3_BUCKET_ACCESS_KEY        string `mapstructure:"AWS_S3_BUCKET_ACCESS_KEY"`
-	AWS_S3_BUCKET_SECRET_ACCESS_KEY string `mapstructure:"AWS_S3_BUCKET_SECRET_ACCESS_KEY"`
-	TIMEOUT                         int    `mapstructure:"TIMEOUT"`
-	API_GROUP                       string `mapstructure:"API_GROUP"`
-	PORT                            int    `mapstructure:"PORT"`
+	ACCESS_KEY_ID               string `mapstructure:"ACCESS_KEY_ID"`
+	SECRET_ACCESS_KEY           string `mapstructure:"SECRET_ACCESS_KEY"`
+	BUCKET_NAME                 string `mapstructure:"S3_BUCKET_NAME"`
+	REGION                      string `mapstructure:"REGION"`
+	S3_BUCKET_ACCESS_KEY        string `mapstructure:"S3_BUCKET_ACCESS_KEY"`
+	S3_BUCKET_SECRET_ACCESS_KEY string `mapstructure:"S3_BUCKET_SECRET_ACCESS_KEY"`
+	TIMEOUT                     int    `mapstructure:"TIMEOUT"`
+	API_GROUP                   string `mapstructure:"API_GROUP"`
+	PORT                        int    `mapstructure:"PORT"`
 }
 
 func LoadConfig(path string) (config Config, err error) {
@@ -48,10 +48,10 @@ func ConnectAWS(cfg Config) (*s3.Client, *s3.PresignClient, error) {
 	defer cancel()
 
 	awsCfg, err := config.LoadDefaultConfig(ctx,
-		config.WithRegion(cfg.AWS_REGION),
+		config.WithRegion(cfg.REGION),
 		config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(
-			cfg.AWS_ACCESS_KEY_ID,
-			cfg.AWS_SECRET_ACCESS_KEY,
+			cfg.ACCESS_KEY_ID,
+			cfg.SECRET_ACCESS_KEY,
 			"",
 		)),
 	)
@@ -64,21 +64,21 @@ func ConnectAWS(cfg Config) (*s3.Client, *s3.PresignClient, error) {
 
 	// Check if bucket exists
 	_, err = client.HeadBucket(ctx, &s3.HeadBucketInput{
-		Bucket: &cfg.AWS_BUCKET_NAME,
+		Bucket: &cfg.BUCKET_NAME,
 	})
 	if err != nil {
 		// If bucket doesn't exist, create it
 		_, err = client.CreateBucket(ctx, &s3.CreateBucketInput{
-			Bucket: &cfg.AWS_BUCKET_NAME,
+			Bucket: &cfg.BUCKET_NAME,
 			CreateBucketConfiguration: &types.CreateBucketConfiguration{
-				LocationConstraint: types.BucketLocationConstraint(cfg.AWS_REGION),
+				LocationConstraint: types.BucketLocationConstraint(cfg.REGION),
 			},
 		})
 		if err != nil {
-			log.Printf("Couldn't create bucket %v. Here's why: %v\n", cfg.AWS_BUCKET_NAME, err)
+			log.Printf("Couldn't create bucket %v. Here's why: %v\n", cfg.BUCKET_NAME, err)
 			return nil, nil, err
 		}
-		log.Printf("Created bucket %v in %v\n", cfg.AWS_BUCKET_NAME, cfg.AWS_REGION)
+		log.Printf("Created bucket %v in %v\n", cfg.BUCKET_NAME, cfg.REGION)
 	}
 
 	return client, presignClient, nil
