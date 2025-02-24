@@ -18,6 +18,7 @@ import (
 
 func main() {
 	cwd, err := os.Getwd()
+	fmt.Println(cwd)
 	if err != nil {
 		log.Fatalf("Error getting current working directory: %v", err)
 	}
