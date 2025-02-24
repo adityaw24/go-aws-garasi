@@ -3,7 +3,6 @@ package configs
 import (
 	"context"
 	"log"
-	"path/filepath"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -26,15 +25,27 @@ type Config struct {
 }
 
 func LoadConfig(path string) (config Config, err error) {
-	viper.AddConfigPath(filepath.Join(path))
-	viper.SetConfigName(".env")
-	viper.SetConfigType("env")
+	// viper.AddConfigPath(filepath.Join(path))
+	// viper.SetConfigName(".env")
+	// viper.SetConfigType("env")
 
-	if err := viper.ReadInConfig(); err != nil {
-		log.Fatalf("Error reading config file, %s", err)
+	// if err := viper.ReadInConfig(); err != nil {
+	// 	log.Fatalf("Error reading config file, %s", err)
+	// }
+
+	// err = viper.Unmarshal(&config)
+
+	config = Config{
+		ACCESS_KEY_ID:               viper.GetString("ACCESS_KEY_ID"),
+		SECRET_ACCESS_KEY:           viper.GetString("SECRET_ACCESS_KEY"),
+		BUCKET_NAME:                 viper.GetString("BUCKET_NAME"),
+		REGION:                      viper.GetString("REGION"),
+		S3_BUCKET_ACCESS_KEY:        viper.GetString("S3_BUCKET_ACCESS_KEY"),
+		S3_BUCKET_SECRET_ACCESS_KEY: viper.GetString("S3_BUCKET_SECRET_ACCESS_KEY"),
+		TIMEOUT:                     viper.GetInt("TIMEOUT"),
+		API_GROUP:                   viper.GetString("API_GROUP"),
+		PORT:                        viper.GetInt("PORT"),
 	}
-
-	err = viper.Unmarshal(&config)
 	if err != nil {
 		log.Fatalf("Unable to decode into struct, %v", err)
 	}
