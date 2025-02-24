@@ -27,6 +27,8 @@ func main() {
 		log.Fatalf("Error loading config: %s", err)
 	}
 
+	fmt.Println(cfg)
+
 	router := gin.Default()
 	router.Use(middleware.CORSMiddleware())
 
