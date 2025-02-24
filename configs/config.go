@@ -34,20 +34,20 @@ func LoadConfig(path string) (config Config, err error) {
 	// }
 
 	// err = viper.Unmarshal(&config)
+	// if err != nil {
+	// 	log.Fatalf("Unable to decode into struct, %v", err)
+	// }
 
 	config = Config{
 		ACCESS_KEY_ID:               viper.GetString("ACCESS_KEY_ID"),
 		SECRET_ACCESS_KEY:           viper.GetString("SECRET_ACCESS_KEY"),
-		BUCKET_NAME:                 viper.GetString("BUCKET_NAME"),
+		BUCKET_NAME:                 viper.GetString("S3_BUCKET_NAME"),
 		REGION:                      viper.GetString("REGION"),
 		S3_BUCKET_ACCESS_KEY:        viper.GetString("S3_BUCKET_ACCESS_KEY"),
 		S3_BUCKET_SECRET_ACCESS_KEY: viper.GetString("S3_BUCKET_SECRET_ACCESS_KEY"),
 		TIMEOUT:                     viper.GetInt("TIMEOUT"),
 		API_GROUP:                   viper.GetString("API_GROUP"),
 		PORT:                        viper.GetInt("PORT"),
-	}
-	if err != nil {
-		log.Fatalf("Unable to decode into struct, %v", err)
 	}
 
 	return config, nil

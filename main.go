@@ -18,7 +18,6 @@ import (
 
 func main() {
 	cwd, err := os.Getwd()
-	fmt.Println(cwd)
 	if err != nil {
 		log.Fatalf("Error getting current working directory: %v", err)
 	}
@@ -27,8 +26,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error loading config: %s", err)
 	}
-
-	fmt.Println(cfg)
 
 	router := gin.Default()
 	router.Use(middleware.CORSMiddleware())
